@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.lifecycle.SavedStateHandle
 import androidx.recyclerview.widget.GridLayoutManager
+import ua.cn.stu.foundation.views.BaseFragment
+import ua.cn.stu.foundation.views.BaseScreen
+import ua.cn.stu.foundation.views.HasScreenTitle
+import ua.cn.stu.foundation.views.screenViewModel
 import ua.cn.stu.simplemvvm.R
 import ua.cn.stu.simplemvvm.databinding.FragmentChangeColorBinding
-import ua.cn.stu.simplemvvm.views.HasScreenTitle
-import ua.cn.stu.simplemvvm.views.base.BaseFragment
-import ua.cn.stu.simplemvvm.views.base.BaseScreen
-import ua.cn.stu.simplemvvm.views.base.screenViewModel
+
 
 /**
  * Screen for changing color.

@@ -1,4 +1,4 @@
-package ua.cn.stu.simplemvvm.views.base
+package ua.cn.stu.foundation.views
 
 import java.io.Serializable
 

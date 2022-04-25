@@ -1,7 +1,7 @@
-package ua.cn.stu.simplemvvm.views.base
+package ua.cn.stu.foundation.views
 
 import androidx.fragment.app.Fragment
-import ua.cn.stu.simplemvvm.MainActivity
+
 
 /**
  * Base class for all fragments
@@ -19,6 +19,6 @@ abstract class BaseFragment : Fragment() {
     fun notifyScreenUpdates() {
         // if you have more than 1 activity -> you should use a separate interface instead of direct
         // cast to MainActivity
-        (requireActivity() as MainActivity).notifyScreenUpdates()
+        (requireActivity() as FragmentHolder).notifyScreenUpdates()
     }
 }
