@@ -13,14 +13,15 @@ sealed class Result<T>{
             SuccessResult(mapper(this.data))
         }
     }
-
 }
+
+sealed class FinalResult<T>: Result<T>()
 
 class PendingResult<T> : Result<T>()
 
-class SuccessResult<T>(val data: T) : Result<T>()
+class SuccessResult<T>(val data: T) : FinalResult<T>()
 
-class ErrorResult<T>(val exception: Exception) : Result<T>()
+class ErrorResult<T>(val exception: Exception) : FinalResult<T>()
 
 fun <T> Result<T>.takeSuccess(): T? =
     if (this is SuccessResult) this.data else null
