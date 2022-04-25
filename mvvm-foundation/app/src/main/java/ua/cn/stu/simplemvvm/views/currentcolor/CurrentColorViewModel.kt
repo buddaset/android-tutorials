@@ -38,7 +38,7 @@ class CurrentColorViewModel(
     init {
         viewModelScope.launch {
             delay(3000)
-            _currentColor.postValue(ErrorResult(RuntimeException()))
+            colorsRepository.addListener(colorListener)
         }
 
     }

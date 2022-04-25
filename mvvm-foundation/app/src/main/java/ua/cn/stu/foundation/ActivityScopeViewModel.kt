@@ -1,15 +1,11 @@
 package ua.cn.stu.foundation
 
 
-import android.widget.Toast
-import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import ua.cn.stu.foundation.navigator.IntermediateNavigator
 import ua.cn.stu.foundation.navigator.Navigator
 import ua.cn.stu.foundation.uiactions.UiActions
-import ua.cn.stu.foundation.utils.ResourceActions
 
 
 const val ARG_SCREEN = "ARG_SCREEN"

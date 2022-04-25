@@ -57,6 +57,10 @@ class ColorsAdapter(
          * @param namedColor color chosen by the user
          */
         fun onColorChosen(namedColor: NamedColor)
+
+
+
+
     }
 
 }
