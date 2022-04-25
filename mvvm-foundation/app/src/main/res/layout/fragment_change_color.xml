@@ -38,4 +38,7 @@
         app:layout_constraintEnd_toStartOf="@id/saveButton"/>
 
 
+    <include layout="@layout/part_result" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
