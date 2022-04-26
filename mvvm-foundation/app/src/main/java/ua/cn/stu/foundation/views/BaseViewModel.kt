@@ -8,6 +8,7 @@ import ua.cn.stu.foundation.model.PendingResult
 import ua.cn.stu.foundation.model.Result
 import ua.cn.stu.foundation.model.tasks.Task
 import ua.cn.stu.foundation.model.tasks.TaskListener
+import ua.cn.stu.foundation.model.tasks.dispatchers.Dispatcher
 import ua.cn.stu.foundation.utils.Event
 
 
@@ -21,7 +22,7 @@ typealias MediatorLiveResult<T> = MediatorLiveData<Result<T>>
 /**
  * Base class for all view-models.
  */
-open class BaseViewModel : ViewModel() {
+open class BaseViewModel(private val dispatcher: Dispatcher) : ViewModel() {
 
     private val tasks = mutableSetOf<Task<*>>()
 
@@ -32,26 +33,35 @@ open class BaseViewModel : ViewModel() {
     open fun onResult(result: Any) {
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        tasks.forEach{
-            it.cancel()
-        tasks.clear()}
+    fun onBackPressed() {
+        clearTasks()
+
     }
 
-    fun <T> Task<T>.safeEnqueue(listener: TaskListener<T>? = null){
+    override fun onCleared() {
+        super.onCleared()
+        clearTasks()
+    }
+
+    fun <T> Task<T>.safeEnqueue(listener: TaskListener<T>? = null) {
         tasks.add(this)
-        this.enqueue {
-            tasks.remove( this)
+        this.enqueue(dispatcher) {
+            tasks.remove(this)
             listener?.invoke(it)
         }
     }
 
     fun <T> Task<T>.into(liveResult: MutableLiveResult<T>) {
-        liveResult.value =PendingResult()
+        liveResult.value = PendingResult()
         this.safeEnqueue {
             liveResult.value = it
         }
+    }
+
+    private fun clearTasks() {
+        tasks.forEach { it.cancel() }
+        tasks.clear()
+
     }
 
 }

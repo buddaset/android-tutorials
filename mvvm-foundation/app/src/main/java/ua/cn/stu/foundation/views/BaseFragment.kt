@@ -30,6 +30,8 @@ abstract class BaseFragment : Fragment() {
         (requireActivity() as FragmentHolder).notifyScreenUpdates()
     }
 
+
+
     fun <T> renderResult(
         root: View, result: Result<T>,
         onPending: () -> Unit,
@@ -43,4 +45,6 @@ abstract class BaseFragment : Fragment() {
             is PendingResult -> onPending()
         }
     }
+
+
 }

@@ -47,6 +47,17 @@ class StackFragmentNavigator(
         activity.supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentCallbacks, false)
     }
 
+    fun onBackPressed() {
+        val f = getCurrentFragment()
+        if (f is BaseFragment)
+            f.viewModel.onBackPressed()
+
+    }
+
+    private fun getCurrentFragment(): Fragment? =
+     activity.supportFragmentManager.findFragmentById(containerId)
+
+
     fun onDestroy() {
         activity.supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentCallbacks)
 
@@ -92,7 +103,7 @@ class StackFragmentNavigator(
 
 
     fun notifyScreenUpdates() {
-        val f = activity.supportFragmentManager.findFragmentById(containerId)
+        val f = getCurrentFragment()
 
         if (activity.supportFragmentManager.backStackEntryCount > 0) {
             // more than 1 screen -> show back button in the toolbar

@@ -1,12 +1,9 @@
 package ua.cn.stu.simplemvvm.views.currentcolor
 
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import ua.cn.stu.foundation.model.ErrorResult
 import ua.cn.stu.foundation.model.PendingResult
 import ua.cn.stu.foundation.model.SuccessResult
 import ua.cn.stu.foundation.model.takeSuccess
+import ua.cn.stu.foundation.model.tasks.dispatchers.Dispatcher
 import ua.cn.stu.foundation.navigator.Navigator
 import ua.cn.stu.foundation.uiactions.UiActions
 import ua.cn.stu.foundation.views.BaseViewModel
@@ -17,13 +14,13 @@ import ua.cn.stu.simplemvvm.model.colors.ColorListener
 import ua.cn.stu.simplemvvm.model.colors.ColorsRepository
 import ua.cn.stu.simplemvvm.model.colors.NamedColor
 import ua.cn.stu.simplemvvm.views.changecolor.ChangeColorFragment
-import java.lang.RuntimeException
 
 class CurrentColorViewModel(
     private val navigator: Navigator,
     private val uiActions: UiActions,
-    private val colorsRepository: ColorsRepository
-) : BaseViewModel() {
+    private val colorsRepository: ColorsRepository,
+    dispatcher: Dispatcher
+) : BaseViewModel(dispatcher) {
 
     private val _currentColor = MutableLiveResult<NamedColor>(PendingResult())
     val currentColor: LiveResult<NamedColor> = _currentColor

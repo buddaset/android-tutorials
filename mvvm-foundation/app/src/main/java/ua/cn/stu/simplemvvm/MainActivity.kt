@@ -51,6 +51,11 @@ class MainActivity : AppCompatActivity(), FragmentHolder {
 
     }
 
+    override fun onBackPressed() {
+        navigator.onBackPressed()
+        super.onBackPressed()
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
