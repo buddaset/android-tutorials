@@ -1,11 +1,10 @@
-package ua.cn.stu.foundation.model.tasks.callback
+package ua.cn.stu.foundation.model
 
-import ua.cn.stu.foundation.model.FinalResult
-import ua.cn.stu.foundation.model.tasks.Task
+
 
 typealias CancelListener = () -> Unit
 
-typealias ExecutionListener<T> = (Emitter<T>) -> Unit
+
 
 /**
  * Emitter instance is passed to [CallbackTask.create] as an argument so you can use it

@@ -1,8 +1,8 @@
 package ua.cn.stu.foundation.sideeffects
 
 import ua.cn.stu.foundation.ActivityScopeViewModel
-import ua.cn.stu.foundation.model.tasks.dispatchers.Dispatcher
-import ua.cn.stu.foundation.model.tasks.dispatchers.MainThreadDispatcher
+import ua.cn.stu.foundation.model.dispatchers.Dispatcher
+import ua.cn.stu.foundation.model.dispatchers.MainThreadDispatcher
 import ua.cn.stu.foundation.utils.ResourceActions
 
 /**

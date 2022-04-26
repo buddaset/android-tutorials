@@ -1,4 +1,4 @@
-package ua.cn.stu.foundation.model.tasks.dispatchers
+package ua.cn.stu.foundation.model.dispatchers
 
 /**
  * Dispatchers run the specified block of code in some way.

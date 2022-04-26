@@ -1,6 +1,6 @@
 package ua.cn.stu.foundation.utils
 
-import ua.cn.stu.foundation.model.tasks.dispatchers.Dispatcher
+import ua.cn.stu.foundation.model.dispatchers.Dispatcher
 
 typealias ResourceAction<T> = (T) -> Unit
 
