@@ -4,6 +4,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import ua.cn.stu.foundation.model.ErrorResult
 import ua.cn.stu.foundation.model.PendingResult
 import ua.cn.stu.foundation.model.Result
@@ -45,6 +50,7 @@ abstract class BaseFragment : Fragment() {
             is ErrorResult -> onError(result.exception)
             is PendingResult -> onPending()
         }
-
     }
+
 }
+

@@ -5,17 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import androidx.lifecycle.*
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.observe
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import androidx.recyclerview.widget.GridLayoutManager
 import ua.cn.stu.foundation.views.BaseFragment
 import ua.cn.stu.foundation.views.BaseScreen
 import ua.cn.stu.foundation.views.HasScreenTitle
 import ua.cn.stu.foundation.views.screenViewModel
 import ua.cn.stu.simplemvvm.R
 import ua.cn.stu.simplemvvm.databinding.FragmentChangeColorBinding
+import ua.cn.stu.simplemvvm.views.collectFlow
 import ua.cn.stu.simplemvvm.views.onTryAgain
 import ua.cn.stu.simplemvvm.views.renderSimpleResult
 
@@ -42,7 +41,11 @@ class ChangeColorFragment : BaseFragment(), HasScreenTitle {
      */
     override fun getScreenTitle(): String? = viewModel.screenTitle.value
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val binding = FragmentChangeColorBinding.inflate(inflater, container, false)
 
         val adapter = ColorsAdapter(viewModel)
@@ -51,20 +54,17 @@ class ChangeColorFragment : BaseFragment(), HasScreenTitle {
         binding.saveButton.setOnClickListener { viewModel.onSavePressed() }
         binding.cancelButton.setOnClickListener { viewModel.onCancelPressed() }
 
-        viewModel.viewState
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach { result ->
-                renderSimpleResult(binding.root, result) { viewState ->
-                    adapter.items = viewState.colorsList
-                    binding.saveButton.visibility =
-                        if (viewState.showSaveButton) View.VISIBLE else View.INVISIBLE
-                    binding.cancelButton.visibility =
-                        if (viewState.showCancelButton) View.VISIBLE else View.INVISIBLE
-                    binding.saveProgressBar.visibility =
-                        if (viewState.showSaveProgressBar) View.VISIBLE else View.GONE
-                }
+        collectFlow(viewModel.viewState) { result ->
+            renderSimpleResult(binding.root, result) { viewState ->
+                adapter.items = viewState.colorsList
+                binding.saveButton.visibility = if (viewState.showSaveButton) View.VISIBLE else View.INVISIBLE
+                binding.cancelButton.visibility = if (viewState.showCancelButton) View.VISIBLE else View.INVISIBLE
+                binding.saveProgressGroup.visibility = if (viewState.showSaveProgressBar) View.VISIBLE else View.GONE
+                binding.saveProgressBar.progress = viewState.saveProgressPercentage
+                binding.savingPercentageTextView.text = viewState.saveProgressPercentageMessage
             }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
+
 
 
 
@@ -83,14 +83,16 @@ class ChangeColorFragment : BaseFragment(), HasScreenTitle {
 
     private fun setupLayoutManager(binding: FragmentChangeColorBinding, adapter: ColorsAdapter) {
         // waiting for list width
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 binding.root.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 val width = binding.root.width
                 val itemWidth = resources.getDimensionPixelSize(R.dimen.item_width)
                 val columns = width / itemWidth
                 binding.colorsRecyclerView.adapter = adapter
-                binding.colorsRecyclerView.layoutManager = GridLayoutManager(requireContext(), columns)
+                binding.colorsRecyclerView.layoutManager =
+                    GridLayoutManager(requireContext(), columns)
             }
         })
     }
