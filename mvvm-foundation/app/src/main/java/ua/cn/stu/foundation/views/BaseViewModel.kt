@@ -2,6 +2,7 @@ package ua.cn.stu.foundation.views
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
 import ua.cn.stu.foundation.model.ErrorResult
 import ua.cn.stu.foundation.model.Result
 import ua.cn.stu.foundation.model.SuccessResult
@@ -41,27 +42,57 @@ open class BaseViewModel() : ViewModel() {
         return false
     }
 
+    fun <T> SavedStateHandle.getStateFlow(key: String, initialValue: T): MutableStateFlow<T> {
+        val savedStateHandle = this
+        val mutableFlow = MutableStateFlow(savedStateHandle[key] ?: initialValue)
+
+        viewModelScope.launch {
+            mutableFlow.collect {
+                savedStateHandle[key] = it
+            }
+        }
+
+        viewModelScope.launch {
+            savedStateHandle.getLiveData<T>(key).asFlow().collect {
+                mutableFlow.value = it
+            }
+        }
+
+        return  mutableFlow
+    }
+
 
     /**
      * Launch task asynchronously and map its result to the specified
      * [liveResult].
      * Task is cancelled automatically if view-model is going to be destroyed.
      */
+
     fun <T> into(liveResult: MutableLiveResult<T>, block: suspend () -> T) {
         viewModelScope.launch {
             try {
-                liveResult.postValue(SuccessResult(block()))
+                liveResult.postValue( SuccessResult(block()))
 
             } catch (e: Exception) {
-                liveResult.postValue(ErrorResult(e))
+                liveResult.postValue( (ErrorResult(e)))
+            }
+        }
+    }
+
+
+    fun <T> into(stateFlow: MutableStateFlow<Result<T>>, block: suspend () -> T) {
+        viewModelScope.launch {
+            try {
+                stateFlow.value = SuccessResult(block())
+
+            } catch (e: Exception) {
+                stateFlow.value = (ErrorResult(e))
             }
         }
     }
 
     private fun clearViewModelScope() {
         viewModelScope.cancel()
-
-
     }
 
 }

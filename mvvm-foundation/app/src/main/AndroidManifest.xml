@@ -13,7 +13,8 @@
         android:theme="@style/Theme.SpaceXHistory"
         android:name="ua.cn.stu.simplemvvm.App">
 
-        <activity android:name="ua.cn.stu.simplemvvm.MainActivity">
+        <activity android:name="ua.cn.stu.simplemvvm.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
